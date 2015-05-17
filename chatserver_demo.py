@@ -24,7 +24,7 @@ import miniboa
 class ChatServer(miniboa.TelnetServer):
 
     def __init__(self, *args, **kwargs):
-        super(ChatServer, self).__init__(*args, on_connect=self.on_connect, on_disconnect=self.on_disconnect, **kwargs)
+        super(ChatServer, self).__init__(*args, **kwargs)
 
         self.running = True
         self.idle_timeout = 300
