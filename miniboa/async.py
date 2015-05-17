@@ -37,7 +37,8 @@ class TelnetServer(object):
     Poll sockets for new connections and sending/receiving data from clients.
     """
     def __init__(self, port=7777, address='',
-            on_connect=None, on_disconnect=None, timeout=0.005):
+            on_connect=None, on_disconnect=None, run=None,
+            timeout=0.005):
         """
         Create a new Telnet Server.
 
@@ -55,6 +56,8 @@ class TelnetServer(object):
             either through a terminated session or client.active being set
             to False.
 
+        run -- function containing the server loop
+
         timeout -- amount of time that Poll() will wait from user inport
             before returning.  Also frees a slice of CPU time.
         """
@@ -68,6 +71,9 @@ class TelnetServer(object):
 
         if on_disconnect is not None:
             self.on_disconnect = on_disconnect
+
+        if run is not None:
+            self.run = run
 
 
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -193,4 +199,16 @@ class TelnetServer(object):
         Placeholder lost connection handler.
         """
         print "-- Lost connection to %s" % client.addrport()
+
+
+    def run(self):
+        """
+        Run a minimal server loop
+        """
+        print "\n\nStarting server on port %d.  CTRL-C to interrupt.\n" % self.port
+
+        while True:
+            self.poll()
+
+        print(">> Server shutdown.")
 

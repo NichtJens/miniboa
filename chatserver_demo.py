@@ -103,6 +103,20 @@ class ChatServer(miniboa.TelnetServer):
             self.running = False
 
 
+    def run(self):
+        """
+        Run the server loop
+        """
+        print(">> Listening for connections on port %d.  CTRL-C to break." % self.port)
+
+        while self.running:
+            self.poll()               ## Send, Recv, and look for new connections
+            self.kick_idle()          ## Check for idle clients
+            self.process_clients()    ## Check for client input
+
+        print(">> Server shutdown.")
+
+
 #------------------------------------------------------------------------------
 #       Main
 #------------------------------------------------------------------------------
@@ -111,18 +125,5 @@ if __name__ == '__main__':
     ## Simple chat server to demonstrate connection handling via the
     ## async and telnet modules.
 
-    ## Create a telnet server with a port, address,
-    ## a function to call with new connections
-    ## and one to call with lost connections.
-
-    server = ChatServer(timeout = .05)
-    print(">> Listening for connections on port %d.  CTRL-C to break." % server.port)
-
-    ## Server Loop
-    while server.running:
-        server.poll()               ## Send, Recv, and look for new connections
-        server.kick_idle()          ## Check for idle clients
-        server.process_clients()    ## Check for client input
-
-    print(">> Server shutdown.")
+    ChatServer(timeout = .05).run()
 
