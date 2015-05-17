@@ -99,12 +99,14 @@ class TelnetServer(object):
         ## key = file descriptor, value = TelnetClient (see miniboa.telnet)
         self.clients = {}
 
+    @property
     def client_count(self):
         """
         Returns the number of active connections.
         """
         return len(self.clients)
 
+    @property
     def client_list(self):
         """
         Returns a list of connected clients.
@@ -167,7 +169,7 @@ class TelnetServer(object):
                     continue
 
                 ## Check for maximum connections
-                if self.client_count() >= MAX_CONNECTIONS:
+                if self.client_count >= MAX_CONNECTIONS:
                     print '?? Refusing new connection; maximum in use.'
                     sock.close()
                     continue

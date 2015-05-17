@@ -30,16 +30,6 @@ class ChatServer(miniboa.TelnetServer):
         self.idle_timeout = 300
 
 
-#    @property
-#    def client_count(self):
-#        return super(ChatServer, self).client_count()
-
-
-    @property
-    def client_list(self):
-        return super(ChatServer, self).client_list()
-
-
     def on_connect(self, client):
         """
         Sample on_connect function.
