@@ -90,7 +90,6 @@ class ChatServer(miniboa.TelnetServer):
         for client in self.client_list:
             client.send(msg)
 
-    
 
     def chat(self, client):
         """
