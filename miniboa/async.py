@@ -31,31 +31,13 @@ else:
     MAX_CONNECTIONS = 1000
 
 
-#-----------------------------------------------------Dummy Connection Handlers
-
-def _on_connect(client):
-    """
-    Placeholder new connection handler.
-    """
-    print "++ Opened connection to %s, sending greeting..." % client.addrport()
-    client.send("Greetings from Miniboa! "
-        " Now it's time to add your code.\n")
-
-def _on_disconnect(client):
-    """
-    Placeholder lost connection handler.
-    """
-    print "-- Lost connection to %s" % client.addrport()
-
-
-#-----------------------------------------------------------------Telnet Server
 
 class TelnetServer(object):
     """
     Poll sockets for new connections and sending/receiving data from clients.
     """
-    def __init__(self, port=7777, address='', on_connect=_on_connect,
-            on_disconnect=_on_disconnect, timeout=0.005):
+    def __init__(self, port=7777, address='',
+            on_connect=None, on_disconnect=None, timeout=0.005):
         """
         Create a new Telnet Server.
 
@@ -79,9 +61,14 @@ class TelnetServer(object):
 
         self.port = port
         self.address = address
-        self.on_connect = on_connect
-        self.on_disconnect = on_disconnect
         self.timeout = timeout
+
+        if on_connect is not None:
+            self.on_connect = on_connect
+
+        if on_disconnect is not None:
+            self.on_disconnect = on_disconnect
+
 
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -191,3 +178,19 @@ class TelnetServer(object):
         for sock_fileno in slist:
             ## Call the connection's send method
             self.clients[sock_fileno].socket_send()
+
+
+    def on_connect(self, client):
+        """
+        Placeholder new connection handler.
+        """
+        print "++ Opened connection to %s, sending greeting..." % client.addrport()
+        client.send("Greetings from Miniboa! "
+            " Now it's time to add your code.\n")
+
+    def on_disconnect(self, client):
+        """
+        Placeholder lost connection handler.
+        """
+        print "-- Lost connection to %s" % client.addrport()
+
